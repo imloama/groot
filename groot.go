@@ -1,0 +1,5 @@
+package groot
+
+func NewServer() {
+
+}
