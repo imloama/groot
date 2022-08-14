@@ -1,5 +1,7 @@
 package groot
 
-func NewServer() {
+import (
+	"sync"
+)
 
-}
+var lock sync.Mutex

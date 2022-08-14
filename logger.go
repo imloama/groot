@@ -27,6 +27,31 @@ var lg *zap.Logger
 
 // InitLogger 初始化Logger
 func InitLogger(cfg *LogConfig) (err error) {
+	if cfg == nil {
+		cfg = &LogConfig{
+			Level:      "debug",
+			Filename:   "./logs/app.log",
+			MaxSize:    100,
+			MaxAge:     100,
+			MaxBackups: 100,
+		}
+	} else {
+		if cfg.Level == "" {
+			cfg.Level = "debug"
+		}
+		if cfg.Filename == "" {
+			cfg.Filename = "./logs/app.log"
+		}
+		if cfg.MaxSize <= 0 {
+			cfg.MaxSize = 100
+		}
+		if cfg.MaxAge <= 0 {
+			cfg.MaxAge = 100
+		}
+		if cfg.MaxBackups <= 0 {
+			cfg.MaxBackups = 100
+		}
+	}
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge)
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
