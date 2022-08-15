@@ -11,8 +11,8 @@ type ServerConfig struct {
 	Host    string
 	Port    int
 	Cors    bool
-	Swagger bool
 	Log     *LogConfig
+	OpenApi *OpenApiConfig
 }
 
 type Server struct {
@@ -30,10 +30,9 @@ func NewDefaultServer(cfg *ServerConfig) *Server {
 
 	if cfg == nil {
 		cfg = &ServerConfig{
-			Host:    "127.0.0.1",
-			Port:    8080,
-			Cors:    false,
-			Swagger: false,
+			Host: "127.0.0.1",
+			Port: 8080,
+			Cors: false,
 		}
 	} else {
 		if cfg.Host == "" {
@@ -50,6 +49,7 @@ func NewDefaultServer(cfg *ServerConfig) *Server {
 	if cfg.Cors {
 		r.Use(cors.Default())
 	}
+	InitOpenApi(cfg.OpenApi, r)
 	// listenon := fmt.Sprintf("%s:%d", ip, port)
 	// fmt.Printf("listen on %s", listenon)
 	// return r
