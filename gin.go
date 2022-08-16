@@ -7,53 +7,30 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ServerConfig struct {
-	Host    string
-	Port    int
-	Cors    bool
-	Log     *LogConfig
-	OpenApi *OpenApiConfig
-}
-
 type Server struct {
 	Engine *gin.Engine
 	Cfg    *ServerConfig
 }
 
-func NewDefaultServer(cfg *ServerConfig) *Server {
-	if cfg == nil {
-		err := UnmarshalConfigByKey("server", cfg)
-		if err != nil {
-			panic(err)
-		}
+func NewDefaultServer() *Server {
+	LoadConfig()
+	if serverCfg == nil {
+		panic("error config file")
 	}
-
-	if cfg == nil {
-		cfg = &ServerConfig{
-			Host: "127.0.0.1",
-			Port: 8080,
-			Cors: false,
-		}
-	} else {
-		if cfg.Host == "" {
-			cfg.Host = "127.0.0.1"
-		}
-		if cfg.Port <= 0 {
-			cfg.Port = 8080
-		}
-	}
-
 	r := gin.Default()
-	InitLogger(cfg.Log)
+	InitLogger(serverCfg.Log)
 	r.Use(GinLogger(), GinRecovery(true))
-	if cfg.Cors {
+	if serverCfg.Cors {
 		r.Use(cors.Default())
 	}
-	InitOpenApi(cfg.OpenApi, r)
+	// InitOpenApi(cfg.OpenApi, r)
+	InitSwagger(serverCfg.Swagger, r)
+
 	// listenon := fmt.Sprintf("%s:%d", ip, port)
 	// fmt.Printf("listen on %s", listenon)
 	// return r
 	return &Server{
+		Cfg:    serverCfg,
 		Engine: r,
 	}
 }

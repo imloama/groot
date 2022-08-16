@@ -1,0 +1,11 @@
+[server]
+host= "0.0.0.0"
+port= 8888
+cors= true
+[server.log]
+level = "all"
+filename = "./logs/example.log"
+[server.swagger]
+enable = true
+title = "example"
+description = "example description"
