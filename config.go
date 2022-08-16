@@ -1,7 +1,6 @@
 package groot
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
@@ -14,13 +13,9 @@ const DEFAULT_CONFIG_FILETYPE = "toml"
 const KEY_DEPLOY_ENV = "DEPLOY_ENV"
 
 type ServerConfig struct {
-	Host string     `json:"host"`
-	Port int        `json:"port"`
-	Cors bool       `json:"cors"`
-	Log  *LogConfig `json:"log"`
-	// OpenApi *OpenApiConfig
-	Swagger *SwaggerInfoData `json:"swagger"`
-	Redis   *RedisConfig     `json:"redis"`
+	Host string `json:"host"`
+	Port int    `json:"port"`
+	Cors bool   `json:"cors"`
 }
 type RedisConfig struct {
 	Addr     string `json:"addr"`
@@ -38,6 +33,9 @@ type SwaggerInfoData struct {
 }
 
 var serverCfg *ServerConfig
+var logCfg = LogConfig{}
+var swaggerCfg = SwaggerInfoData{}
+var redisCfg = RedisConfig{}
 
 func LoadConfig(files ...string) error {
 	if serverCfg != nil {
@@ -79,9 +77,9 @@ func LoadConfig(files ...string) error {
 		fmt.Println("error read config file", err.Error())
 		panic(err)
 	}
-	// fmt.Printf("host = %s\n", viper.GetString("server.host"))
-	data, _ := json.Marshal(serverCfg)
-	fmt.Println("config file content :", string(data))
+	viper.UnmarshalKey("log", &logCfg)
+	viper.UnmarshalKey("swagger", &swaggerCfg)
+	viper.UnmarshalKey("redis", &redisCfg)
 	return nil
 
 }

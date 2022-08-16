@@ -18,13 +18,13 @@ func NewDefaultServer() *Server {
 		panic("error config file")
 	}
 	r := gin.Default()
-	InitLogger(serverCfg.Log)
+	InitLogger(&logCfg)
 	r.Use(GinLogger(), GinRecovery(true))
 	if serverCfg.Cors {
 		r.Use(cors.Default())
 	}
 	// InitOpenApi(cfg.OpenApi, r)
-	InitSwagger(serverCfg.Swagger, r)
+	InitSwagger(&swaggerCfg, r)
 
 	// listenon := fmt.Sprintf("%s:%d", ip, port)
 	// fmt.Printf("listen on %s", listenon)

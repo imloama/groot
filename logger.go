@@ -27,7 +27,7 @@ var lg *zap.Logger
 
 // InitLogger 初始化Logger
 func InitLogger(cfg *LogConfig) (err error) {
-	if cfg == nil {
+	if cfg == nil || cfg.Filename == "" {
 		cfg = &LogConfig{
 			Level:      "debug",
 			Filename:   "./logs/app.log",

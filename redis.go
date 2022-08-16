@@ -1,6 +1,8 @@
 package groot
 
 import (
+	"fmt"
+
 	goredislib "github.com/go-redis/redis/v8"
 	"github.com/go-redsync/redsync/v4"
 	"github.com/go-redsync/redsync/v4/redis/goredis/v8"
@@ -14,15 +16,15 @@ func InitRedis() error {
 	if err != nil {
 		return err
 	}
-	if serverCfg.Redis == nil {
-		Debug("没有配置redis信息！")
+	if redisCfg.Addr == "" {
+		fmt.Println("没有配置redis信息！")
 		return nil
 	}
 
 	client = goredislib.NewClient(&goredislib.Options{
-		Addr:     serverCfg.Redis.Addr,
-		Password: serverCfg.Redis.Password, // no password set
-		DB:       serverCfg.Redis.Db,       // use default DB
+		Addr:     redisCfg.Addr,
+		Password: redisCfg.Password, // no password set
+		DB:       redisCfg.Db,       // use default DB
 	})
 	pool := goredis.NewPool(client) // or, pool := redigo.NewPool(...)
 	// Create an instance of redisync to be used to obtain a mutual exclusion
