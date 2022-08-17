@@ -37,5 +37,6 @@ func NewDefaultServer() *Server {
 
 func (s *Server) Run() error {
 	listenon := fmt.Sprintf("%s:%d", s.Cfg.Host, s.Cfg.Port)
+	fmt.Printf("server listenon : %s \n", listenon)
 	return s.Engine.Run(listenon)
 }

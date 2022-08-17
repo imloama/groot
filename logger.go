@@ -57,7 +57,7 @@ func InitLogger(cfg *LogConfig) (err error) {
 	var l = new(zapcore.Level)
 	err = l.UnmarshalText([]byte(cfg.Level))
 	if err != nil {
-		return
+		panic(err)
 	}
 	core := zapcore.NewCore(encoder, writeSyncer, l)
 	lg = zap.New(core, zap.AddCaller())

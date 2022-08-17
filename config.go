@@ -36,6 +36,7 @@ var serverCfg *ServerConfig
 var logCfg = LogConfig{}
 var swaggerCfg = SwaggerInfoData{}
 var redisCfg = RedisConfig{}
+var ormCfg = OrmConfig{}
 
 func LoadConfig(files ...string) error {
 	if serverCfg != nil {
@@ -80,6 +81,7 @@ func LoadConfig(files ...string) error {
 	viper.UnmarshalKey("log", &logCfg)
 	viper.UnmarshalKey("swagger", &swaggerCfg)
 	viper.UnmarshalKey("redis", &redisCfg)
+	viper.UnmarshalKey("orm", &ormCfg)
 	return nil
 
 }

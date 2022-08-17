@@ -2,10 +2,17 @@
 host= "0.0.0.0"
 port= 8888
 cors= true
-[server.log]
-level = "all"
+
+[log]
+level = "info"
 filename = "./logs/example.log"
-[server.swagger]
+
+[swagger]
 enable = true
 title = "example"
 description = "example description"
+
+[orm]
+driver = "pgsql"
+url = "host=127.0.0.1 user=postgres password=postgres dbname=demo port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+debug = true

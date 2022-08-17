@@ -37,7 +37,10 @@ func GetRedisClient() *goredislib.Client {
 	if client == nil {
 		lock.Lock()
 		defer lock.Unlock()
-		InitRedis()
+		if client == nil {
+			InitRedis()
+		}
+
 	}
 	return client
 }

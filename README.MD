@@ -7,3 +7,4 @@ gin api template
 - zap
 - go-redis
 - swaggo
+- gorm
