@@ -53,13 +53,14 @@ func InitLogger(cfg *LogConfig) (err error) {
 		}
 	}
 	writeSyncer := getLogWriter(cfg.Filename, cfg.MaxSize, cfg.MaxBackups, cfg.MaxAge)
+	writes := []zapcore.WriteSyncer{writeSyncer, zapcore.AddSync(os.Stdout)}
 	encoder := getEncoder()
 	var l = new(zapcore.Level)
 	err = l.UnmarshalText([]byte(cfg.Level))
 	if err != nil {
 		panic(err)
 	}
-	core := zapcore.NewCore(encoder, writeSyncer, l)
+	core := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(writes...), l)
 	lg = zap.New(core, zap.AddCaller())
 	zap.ReplaceGlobals(lg)
 	return
