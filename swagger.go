@@ -68,3 +68,7 @@ func InitSwagger(cfg *SwaggerInfoData, r *gin.Engine) {
 	swag.Register(swag.Name, &s{})
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }
+
+func SetSwagDoc(docstr string) {
+	doc = docstr
+}
