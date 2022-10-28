@@ -12,12 +12,9 @@ var client *goredislib.Client
 var rs *redsync.Redsync
 
 func InitRedis() error {
-	err := LoadConfig()
-	if err != nil {
-		return err
-	}
 	if redisCfg.Addr == "" {
 		fmt.Println("没有配置redis信息！")
+		Debug("没有配置redis信息!")
 		return nil
 	}
 
@@ -40,7 +37,9 @@ func GetRedisClient() *goredislib.Client {
 		if client == nil {
 			InitRedis()
 		}
-
+	}
+	if client == nil {
+		panic("redis配置不正确为空！")
 	}
 	return client
 }

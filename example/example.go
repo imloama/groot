@@ -2,6 +2,7 @@ package main
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/imloama/groot"
@@ -23,6 +24,13 @@ func main() {
 		var mapdata = make(map[string]interface{})
 		db.Raw(`select * from sys_user where user_id = 1`).Scan(&mapdata)
 		ctx.JSON(http.StatusOK, mapdata)
+	})
+
+	r.GET("/redis", func(ctx *gin.Context) {
+		db := groot.GetRedisClient()
+		db.SetEX(ctx.Request.Context(), "a", "hello, redis!", time.Second*20)
+		result := db.Get(ctx.Request.Context(), "a").Val()
+		ctx.JSON(http.StatusOK, result)
 	})
 
 	err := server.Run()
