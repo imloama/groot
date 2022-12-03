@@ -3,6 +3,7 @@ package groot
 import (
 	"bytes"
 	"encoding/json"
+	"io/ioutil"
 	"strings"
 
 	"github.com/alecthomas/template"
@@ -23,7 +24,8 @@ var doc = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {},
+	"definitions":{}
 }`
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
@@ -64,6 +66,14 @@ func (s *s) ReadDoc() string {
 func InitSwagger(cfg *SwaggerInfoData, r *gin.Engine) {
 	if cfg == nil || !cfg.Enable {
 		return
+	}
+	SwaggerInfo = cfg
+	if cfg.JsonFile != "" {
+		jsondata, err := ioutil.ReadFile(cfg.JsonFile)
+		if err != nil {
+			panic(err)
+		}
+		doc = string(jsondata)
 	}
 	swag.Register(swag.Name, &s{})
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))

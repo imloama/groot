@@ -30,6 +30,7 @@ type SwaggerInfoData struct {
 	Schemes     []string
 	Title       string
 	Description string
+	JsonFile    string // json file path
 }
 
 var serverCfg *ServerConfig
