@@ -11,7 +11,9 @@ import (
 func main() {
 	server := groot.NewDefaultServer()
 	r := server.Engine
+	r.Use(groot.TraceIdMiddleware())
 	r.GET("/", func(ctx *gin.Context) {
+		groot.TDebug(ctx, "hello,world!==============")
 		ctx.String(http.StatusOK, "hello, world!")
 	})
 

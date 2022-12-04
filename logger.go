@@ -61,7 +61,7 @@ func InitLogger(cfg *LogConfig) (err error) {
 		panic(err)
 	}
 	core := zapcore.NewCore(encoder, zapcore.NewMultiWriteSyncer(writes...), l)
-	lg = zap.New(core, zap.AddCaller())
+	lg = zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 	zap.ReplaceGlobals(lg)
 	return
 }
@@ -150,7 +150,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 }
 
 func Debug(msg string, fields ...zap.Field) {
-	lg.Debug(msg, fields...)
+	Log().Debug(msg, fields...)
 }
 
 func Error(msg string, fields ...zap.Field) {
@@ -160,3 +160,17 @@ func Error(msg string, fields ...zap.Field) {
 func Log() *zap.Logger {
 	return lg
 }
+
+// func (l *zap.Logger) GetCtx(ctx context.Context) *zap.Logger {
+// 	log, ok := ctx.Value(l.opts.CtxKey).(*zap.Logger)
+// 	if ok {
+// 		return log
+// 	}
+// 	return l.Logger
+// }
+
+// func (l *zap.Logger) AddCtx(ctx context.Context, field ...zap.Field) (context.Context, *zap.Logger) {
+// 	log := l.With(field...)
+// 	ctx = context.WithValue(ctx, l.opts.CtxKey, log)
+// 	return ctx, log
+// }
