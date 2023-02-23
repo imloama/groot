@@ -1,7 +1,6 @@
 package groot
 
 import (
-	"errors"
 	"fmt"
 	"os"
 
@@ -33,17 +32,13 @@ type SwaggerInfoData struct {
 	JsonFile    string // json file path
 }
 
-var serverCfg *ServerConfig
+var serverCfg = ServerConfig{}
 var logCfg = LogConfig{}
 var swaggerCfg = SwaggerInfoData{}
 var redisCfg = RedisConfig{}
 var ormCfg = OrmConfig{}
 
 func LoadConfig(files ...string) error {
-	if serverCfg != nil {
-		return errors.New("init config over")
-	}
-	serverCfg = &ServerConfig{}
 	filename := DEFAULT_CONFIG_FILENAME
 	filetype := DEFAULT_CONFIG_FILETYPE
 	filepath := "./config"
@@ -74,7 +69,7 @@ func LoadConfig(files ...string) error {
 	if err != nil {             // Handle errors reading the config file
 		panic(err)
 	}
-	err = viper.UnmarshalKey("server", serverCfg)
+	err = viper.UnmarshalKey("server", &serverCfg)
 	if err != nil {
 		fmt.Println("error read config file", err.Error())
 		panic(err)
@@ -85,4 +80,21 @@ func LoadConfig(files ...string) error {
 	viper.UnmarshalKey("orm", &ormCfg)
 	return nil
 
+}
+
+func GetSwaggerConfig() SwaggerInfoData {
+	return swaggerCfg
+}
+
+func GetServerConfig() ServerConfig {
+	return serverCfg
+}
+func GetLogConfig() LogConfig {
+	return logCfg
+}
+func GetRedisConfig() RedisConfig {
+	return redisCfg
+}
+func GetOrmConfig() OrmConfig {
+	return ormCfg
 }

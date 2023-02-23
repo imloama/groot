@@ -30,7 +30,7 @@ func main() {
 
 	r.GET("/redis", func(ctx *gin.Context) {
 		db := groot.GetRedisClient()
-		db.SetEX(ctx.Request.Context(), "a", "hello, redis!", time.Second*20)
+		db.SetEx(ctx.Request.Context(), "a", "hello, redis!", time.Second*20)
 		result := db.Get(ctx.Request.Context(), "a").Val()
 		ctx.JSON(http.StatusOK, result)
 	})

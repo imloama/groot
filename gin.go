@@ -14,9 +14,6 @@ type Server struct {
 
 func NewDefaultServer() *Server {
 	LoadConfig()
-	if serverCfg == nil {
-		panic("error config file")
-	}
 	r := gin.Default()
 	InitLogger(&logCfg)
 	r.Use(GinLogger(), GinRecovery(true))
@@ -30,7 +27,7 @@ func NewDefaultServer() *Server {
 	// fmt.Printf("listen on %s", listenon)
 	// return r
 	return &Server{
-		Cfg:    serverCfg,
+		Cfg:    &serverCfg,
 		Engine: r,
 	}
 }
